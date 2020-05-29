@@ -1,9 +1,6 @@
 {-# LANGUAGE DisambiguateRecordFields #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE FlexibleContexts #-}
-
-
-
 {-# LANGUAGE OverloadedLabels #-}
 
 module Utils (
