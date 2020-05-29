@@ -63,7 +63,6 @@ main = do
 				C.runBotIO (C.BotToken $ L.fromStrict token) $ do
 				C.addCommands $ do
 					C.command @'[] "ping" $ \ctx -> do
-						DiP.info . showt $ CC.channel ctx
 						void . C.invoke . C.CreateMessage (CC.channel ctx) . embed_options $ C.Embed {
 							C.title = Just ":ping_pong: Pong!",
 							C.type_ = Nothing,
