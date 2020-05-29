@@ -59,3 +59,6 @@ main = do
 					C.command @'[] "ping" $ \ctx ->
 						void . C.invoke . C.CreateMessage (CC.channel ctx) .
 						U.embed_options $ U.simple_embed ":ping_pong: Pong!" ":)"
+				C.react @'C.MessageCreateEvt $ \msg ->
+					void . C.invoke . C.CreateMessage (msg ^. #channelID) .
+						U.embed_options $ U.simple_embed "Saying" $ msg ^. #content
