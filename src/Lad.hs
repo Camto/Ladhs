@@ -51,9 +51,10 @@ import qualified Utils as U
 main :: IO ()
 main = do
 	token <- view packed <$> getEnv "TOKEN"
-	U.get_json "dinos" >>= \case
-		Just a -> print a
-		Nothing -> mzero
+	-- I know this isn't pure, but the program *should* crash if it can't find all the data files.
+	Just icons <- U.get_json "icons"
+	Just emojis <- U.get_json "emojis"
+	Just dinos <- U.get_json "dinos"
 	void . P.runFinal . P.embedToFinal .
 		C.runCacheInMemory . C.runMetricsNoop .
 			C.useConstantPrefix "l." $
