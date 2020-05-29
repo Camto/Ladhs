@@ -2,6 +2,10 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE FlexibleContexts #-}
 
+
+
+{-# LANGUAGE OverloadedLabels #-}
+
 module Utils (
 	embed_color,
 	embed_msg,
@@ -19,6 +23,7 @@ import qualified Calamity.Commands.Context as CC
 import qualified Calamity.HTTP.Channel as C
 import qualified Calamity.Types.Model.Channel.Embed as C
 
+import Control.Lens
 import qualified Data.Text.Lazy as L
 import qualified Data.Word as W
 
@@ -30,22 +35,6 @@ empty_embed = C.Embed {
 	C.description = Nothing,
 	C.url = Nothing,
 	C.timestamp = Nothing,
-	C.color = Nothing,
-	C.footer = Nothing,
-	C.image = Nothing,
-	C.thumbnail = Nothing,
-	C.video = Nothing,
-	C.provider = Nothing,
-	C.author = Nothing,
-	C.fields = []
-}
-
-simple_embed title descr = C.Embed {
-	C.title = Just title,
-	C.type_ = Nothing,
-	C.description = Just descr,
-	C.url = Nothing,
-	C.timestamp = Nothing,
 	C.color = Just embed_color,
 	C.footer = Nothing,
 	C.image = Nothing,
@@ -55,6 +44,13 @@ simple_embed title descr = C.Embed {
 	C.author = Nothing,
 	C.fields = []
 }
+
+a = empty_embed & #color .~ Just embed_color
+
+simple_embed title descr =
+	empty_embed
+		& #title .~ Just title
+		& #description .~ Just descr
 
 embed_msg embed = C.CreateMessageOptions {
 	C.content = Nothing,

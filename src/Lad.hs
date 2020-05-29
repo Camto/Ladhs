@@ -60,11 +60,11 @@ main = do
 					Right self -> do
 						C.addCommands $ do
 							C.command @'[] "ping" $ \ctx ->
-								void . U.send_embed (CC.channel ctx) $
+								void . U.send_embed (ctx ^. #channel) $
 									U.simple_embed ":ping_pong: Pong!" ":)"
 							C.command @'[C.KleeneStarConcat L.Text] "say" $ \ctx text -> do
-								void $ U.send_text (CC.channel ctx) text
-								void $ U.delete_msg (CC.channel ctx) $ CC.message ctx
+								void $ U.send_text (ctx ^. #channel) text
+								void $ U.delete_msg (ctx ^. #channel) $ (ctx ^. #message)
 						{-C.react @'C.MessageCreateEvt $ \msg ->
 							when (
 								C.getID (msg ^. #author) /= (self ^. #id)) $ do
