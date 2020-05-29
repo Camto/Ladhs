@@ -22,6 +22,8 @@ import qualified Calamity.Commands as C
 import qualified Calamity.Commands.Context as CC
 import qualified Calamity.Metrics.Noop as C
 import qualified Calamity.HTTP.Channel as C
+import qualified Calamity.HTTP.User as C
+--import qualified Calamity.Types.Model.User as C
 import qualified Calamity.Types.Model.Channel.Embed as C
 import qualified Calamity.Types.Model.Channel.Message as C
 
@@ -29,6 +31,7 @@ import qualified Calamity.Types.Model.Channel.Message as C
 import Control.Lens
 import Control.Monad
 
+-- import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
 import Data.Text.Strict.Lens
 
@@ -45,9 +48,6 @@ import System.Environment
 
 import qualified Utils as U
 
--- tellt :: (C.BotC r, C.Tellable t) => t -> L.Text -> P.Sem r (Either C.RestError C.Message)
--- tellt t m = C.tell t $ L.toStrict m
-
 main :: IO ()
 main = do
 	token <- view packed <$> getEnv "TOKEN"
@@ -55,10 +55,17 @@ main = do
 		C.runCacheInMemory . C.runMetricsNoop .
 			C.useConstantPrefix "l." $
 				C.runBotIO (C.BotToken $ L.fromStrict token) $ do
-				C.addCommands $ do
-					C.command @'[] "ping" $ \ctx ->
-						void . C.invoke . C.CreateMessage (CC.channel ctx) .
-						U.embed_options $ U.simple_embed ":ping_pong: Pong!" ":)"
-				C.react @'C.MessageCreateEvt $ \msg ->
-					void . C.invoke . C.CreateMessage (msg ^. #channelID) .
-						U.embed_options $ U.simple_embed "Saying" $ msg ^. #content
+				err_self <- C.invoke C.GetCurrentUser
+				case err_self of
+					Right self -> do
+						C.addCommands $ do
+							C.command @'[] "ping" $ \ctx ->
+								void . U.send_embed (CC.channel ctx) $
+								U.simple_embed ":ping_pong: Pong!" ":)"
+						C.react @'C.MessageCreateEvt $ \msg ->
+							when (
+								C.getID (msg ^. #author) /= (self ^. #id) &&
+								(L.isPrefixOf "l.say" $ msg ^. #content)) $ do
+							void . U.send (msg ^. #channelID) .
+								U.text_msg $ msg ^. #content
+					Left _ -> P.embed mzero

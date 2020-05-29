@@ -27,3 +27,4 @@ executable Bottst
                  di-polysemy,
                  di-df1 >= 1.2 && < 1.2.1
   ghc-options: -fplugin=Polysemy.Plugin
+               -Wtabs
