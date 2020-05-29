@@ -14,7 +14,7 @@
 
 {-# LANGUAGE DisambiguateRecordFields #-}
 
-module Lad where
+module Main where
 
 import qualified Calamity as C
 import qualified Calamity.Cache.InMemory as C
