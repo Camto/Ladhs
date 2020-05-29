@@ -8,7 +8,9 @@ module Utils (
 	text_msg,
 	simple_embed,
 	send,
-	send_embed
+	send_embed,
+	send_text,
+	delete_msg
 ) where
 
 import qualified Calamity as C
@@ -70,8 +72,14 @@ text_msg text = C.CreateMessageOptions {
 	C.embed = Nothing
 }
 
-send channel msg =
-	C.invoke $ C.CreateMessage channel msg
+send chnl msg =
+	C.invoke $ C.CreateMessage chnl msg
 
-send_embed channel embed =
-	send channel $ embed_msg embed
+send_embed chnl embed =
+	send chnl $ embed_msg embed
+
+send_text chnl text =
+	send chnl $ text_msg text
+
+delete_msg chnl msg =
+	C.invoke $ C.DeleteMessage chnl msg
