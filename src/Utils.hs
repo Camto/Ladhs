@@ -1,6 +1,7 @@
 {-# LANGUAGE DisambiguateRecordFields #-}
 
 module Utils (
+	embed_color,
 	embed_options
 ) where
 
