@@ -1,19 +1,3 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedLabels #-}
-
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE PolyKinds #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeApplications #-}
-
-{-# LANGUAGE TypeOperators #-}
-
-{-# LANGUAGE DisambiguateRecordFields #-}
-
 module Main where
 
 import qualified Calamity as C
@@ -48,11 +32,14 @@ import System.Environment
 
 import qualified Utils as U
 
+import Cmds.Say
+import Cmds.Ping
+
 main :: IO ()
 main = do
 	token <- view packed <$> getEnv "TOKEN"
 	-- I know this isn't pure, but the program *should* crash if it can't find all the data files.
-	Just icons <- U.get_json "icons"
+	--Just icons <- U.get_json "icons"
 	Just emojis <- U.get_json "emojis"
 	Just dinos <- U.get_json "dinos"
 	void . P.runFinal . P.embedToFinal .
@@ -63,12 +50,8 @@ main = do
 				case err_self of
 					Right self -> do
 						C.addCommands $ do
-							C.command @'[] "ping" $ \ctx ->
-								void . U.send_embed (ctx ^. #channel) $
-									U.simple_embed ":ping_pong: Pong!" ":)"
-							C.command @'[C.KleeneStarConcat L.Text] "say" $ \ctx text -> do
-								void $ U.send_text (ctx ^. #channel) text
-								void $ U.delete_msg (ctx ^. #channel) $ (ctx ^. #message)
+							say
+							ping
 						{-C.react @'C.MessageCreateEvt $ \msg ->
 							when (
 								C.getID (msg ^. #author) /= (self ^. #id)) $ do

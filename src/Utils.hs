@@ -1,9 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DisambiguateRecordFields #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLabels #-}
-
 module Utils (
 	get_json,
 	embed_color,

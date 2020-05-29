@@ -1,22 +1,24 @@
-name:                Bottst
-version:             0.1
+name: Bottst
+version: 0.1
 -- synopsis:
 -- description:
-homepage:            camto.github.io
-license:             MIT
-license-file:        license.txt
-author:              Benjamin Philippe Applegate
-maintainer:          www.ben.pr@gmail.com
-copyright:           2020 Benjamin Philippe Applegate, Jan-Paul Vincent Ramos
-category:            Web
-build-type:          Simple
-cabal-version:       >=1.10
-extra-source-files:  readme.md
+homepage: camto.github.io
+license: MIT
+license-file: license.txt
+author: Benjamin Philippe Applegate
+maintainer: www.ben.pr@gmail.com
+copyright: 2020 Benjamin Philippe Applegate, Jan-Paul Vincent Ramos
+category: Web
+build-type: Simple
+cabal-version: >=1.10
+extra-source-files: readme.md
 
 executable Bottst
-  hs-source-dirs:      src
-  main-is:             Lad.hs
-  default-language:    Haskell2010
+  hs-source-dirs: src
+  main-is: Lad.hs
+  other-modules: Utils
+                 Cmds.Say
+  default-language: Haskell2010
   build-depends: base >= 4.7 && < 5,
                  calamity,
                  text,
@@ -31,4 +33,16 @@ executable Bottst
                  di-polysemy,
                  di-df1 >= 1.2 && < 1.2.1
   ghc-options: -fplugin=Polysemy.Plugin
-               -Wtabs
+               -fno-warn-tabs
+  default-extensions: DataKinds
+                      FlexibleContexts
+                      GADTs
+                      LambdaCase
+                      OverloadedLabels
+                      OverloadedStrings
+                      PolyKinds
+                      ScopedTypeVariables
+                      TemplateHaskell
+                      TypeApplications
+                      TypeOperators
+                      DisambiguateRecordFields
