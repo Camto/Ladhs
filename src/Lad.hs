@@ -23,6 +23,7 @@ import qualified Calamity.Commands.Context as CC
 import qualified Calamity.Metrics.Noop as C
 import qualified Calamity.HTTP.Channel as C
 import qualified Calamity.Types.Model.Channel.Embed as C
+import qualified Calamity.Types.Model.Channel.Message as C
 
 -- import Control.Concurrent
 import Control.Lens
@@ -55,19 +56,6 @@ main = do
 			C.useConstantPrefix "l." $
 				C.runBotIO (C.BotToken $ L.fromStrict token) $ do
 				C.addCommands $ do
-					C.command @'[] "ping" $ \ctx -> do
-						void . C.invoke . C.CreateMessage (CC.channel ctx) . U.embed_options $ C.Embed {
-							C.title = Just ":ping_pong: Pong!",
-							C.type_ = Nothing,
-							C.description = Nothing,
-							C.url = Nothing,
-							C.timestamp = Nothing,
-							C.color = Just U.embed_color,
-							C.footer = Nothing,
-							C.image = Nothing,
-							C.thumbnail = Nothing,
-							C.video = Nothing,
-							C.provider = Nothing,
-							C.author = Nothing,
-							C.fields = []
-						}
+					C.command @'[] "ping" $ \ctx ->
+						void . C.invoke . C.CreateMessage (CC.channel ctx) .
+						U.embed_options $ U.simple_embed ":ping_pong: Pong!" ":)"
