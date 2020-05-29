@@ -2,12 +2,12 @@ name:                Bottst
 version:             0.1
 -- synopsis:
 -- description:
-homepage:            https://github.com/githubuser/Bottst#readme
+homepage:            camto.github.io
 license:             MIT
 license-file:        license.txt
 author:              Benjamin Philippe Applegate
-maintainer:          example@example.com
-copyright:           2020 Author name here
+maintainer:          www.ben.pr@gmail.com
+copyright:           2020 Benjamin Philippe Applegate, Jan-Paul Vincent Ramos
 category:            Web
 build-type:          Simple
 cabal-version:       >=1.10
