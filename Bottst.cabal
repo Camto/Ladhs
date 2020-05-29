@@ -20,6 +20,7 @@ executable Bottst
   build-depends: base >= 4.7 && < 5,
                  calamity,
                  text,
+                 composition,
                  lens,
                  text-show,
                  polysemy,

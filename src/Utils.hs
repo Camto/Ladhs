@@ -19,10 +19,15 @@ import qualified Calamity.Commands as C
 import qualified Calamity.Commands.Context as CC
 import qualified Calamity.HTTP.Channel as C
 import qualified Calamity.Types.Model.Channel.Embed as C
+-- I know I'm not supposed to import Internal but that's the only way to make the typechecker happy with send's definition, and I wanna use .: dang it!
+import Calamity.HTTP.Internal.Request as C
 
+import Data.Composition
 import Control.Lens
 import qualified Data.Text.Lazy as L
 import qualified Data.Word as W
+
+import qualified Polysemy as P
 
 embed_color = fromInteger 0xe07bb8 :: W.Word64
 
@@ -59,10 +64,19 @@ embed_msg embed = empty_msg_opts & #embed .~ Just embed
 
 text_msg text = empty_msg_opts & #content .~ (Just $ L.toStrict text)
 
-send chnl msg = C.invoke $ C.CreateMessage chnl msg
+send ::
+	(C.BotC r, C.HasID C.Channel c) =>
+	c -> C.CreateMessageOptions ->
+		P.Sem r (Either
+			C.RestError
+			(C.Result (C.ChannelRequest C.Message)))
+send = C.invoke .: C.CreateMessage
 
 send_embed chnl embed = send chnl $ embed_msg embed
 
 send_text chnl text = send chnl $ text_msg text
 
-delete_msg chnl msg = C.invoke $ C.DeleteMessage chnl msg
+delete_msg ::
+	(C.BotC r, C.HasID C.Channel c, C.HasID C.Message m) =>
+	c -> m -> P.Sem r (Either C.RestError ())
+delete_msg = C.invoke .: C.DeleteMessage
