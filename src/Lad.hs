@@ -51,6 +51,9 @@ import qualified Utils as U
 main :: IO ()
 main = do
 	token <- view packed <$> getEnv "TOKEN"
+	U.get_json "dinos" >>= \case
+		Just a -> print a
+		Nothing -> mzero
 	void . P.runFinal . P.embedToFinal .
 		C.runCacheInMemory . C.runMetricsNoop .
 			C.useConstantPrefix "l." $

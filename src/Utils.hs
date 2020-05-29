@@ -1,9 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DisambiguateRecordFields #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedLabels #-}
 
 module Utils (
+	get_json,
 	embed_color,
 	embed_msg,
 	text_msg,
@@ -24,10 +26,18 @@ import Calamity.HTTP.Internal.Request as C
 
 import Data.Composition
 import Control.Lens
+import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
 import qualified Data.Word as W
+import qualified Data.ByteString.Lazy as B
+import qualified Data.Aeson as AS
+import qualified Data.HashMap.Strict as HM
 
 import qualified Polysemy as P
+
+get_json :: FilePath -> IO (Maybe (HM.HashMap T.Text T.Text))
+get_json filename =
+	(B.readFile $ "Data/" <> filename <> ".json") >>= return . AS.decode
 
 embed_color = fromInteger 0xe07bb8 :: W.Word64
 
