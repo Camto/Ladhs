@@ -43,8 +43,8 @@ import TextShow
 
 import System.Environment
 
-tellt :: (C.BotC r, C.Tellable t) => t -> L.Text -> P.Sem r (Either C.RestError C.Message)
-tellt t m = C.tell t $ L.toStrict m
+-- tellt :: (C.BotC r, C.Tellable t) => t -> L.Text -> P.Sem r (Either C.RestError C.Message)
+-- tellt t m = C.tell t $ L.toStrict m
 
 embed_options embed = C.CreateMessageOptions {
 	C.content = Nothing,
