@@ -47,30 +47,22 @@ simple_embed title descr =
 		& #title .~ Just title
 		& #description .~ Just descr
 
-embed_msg embed = C.CreateMessageOptions {
+empty_msg_opts = C.CreateMessageOptions {
 	C.content = Nothing,
-	C.nonce = Nothing,
-	C.tts = Nothing,
-	C.file = Nothing,
-	C.embed = Just embed
-}
-
-text_msg text = C.CreateMessageOptions {
-	C.content = Just $ L.toStrict text,
 	C.nonce = Nothing,
 	C.tts = Nothing,
 	C.file = Nothing,
 	C.embed = Nothing
 }
 
-send chnl msg =
-	C.invoke $ C.CreateMessage chnl msg
+embed_msg embed = empty_msg_opts & #embed .~ Just embed
 
-send_embed chnl embed =
-	send chnl $ embed_msg embed
+text_msg text = empty_msg_opts & #content .~ (Just $ L.toStrict text)
 
-send_text chnl text =
-	send chnl $ text_msg text
+send chnl msg = C.invoke $ C.CreateMessage chnl msg
 
-delete_msg chnl msg =
-	C.invoke $ C.DeleteMessage chnl msg
+send_embed chnl embed = send chnl $ embed_msg embed
+
+send_text chnl text = send chnl $ text_msg text
+
+delete_msg chnl msg = C.invoke $ C.DeleteMessage chnl msg
