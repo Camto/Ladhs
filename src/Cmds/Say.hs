@@ -23,6 +23,7 @@ say ::
 			C.SetupEff
 				'[C.ParsePrefix, C.MetricEff, C.CacheEff, P.Embed IO, P.Final IO]))
 		C.Command
+
 say = C.command @'[C.KleeneStarConcat L.Text] "say" $ \ctx text -> do
 	void $ U.send_text (ctx ^. #channel) text
 	void $ U.delete_msg (ctx ^. #channel) $ (ctx ^. #message)

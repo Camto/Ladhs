@@ -23,6 +23,7 @@ ping ::
 			C.SetupEff
 				'[C.ParsePrefix, C.MetricEff, C.CacheEff, P.Embed IO, P.Final IO]))
 		C.Command
+
 ping = C.command @'[] "ping" $ \ctx ->
 	void . U.send_embed (ctx ^. #channel) $
 		U.simple_embed ":ping_pong: Pong!" ":)"
