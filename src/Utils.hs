@@ -42,8 +42,6 @@ empty_embed = C.Embed {
 	C.fields = []
 }
 
-a = empty_embed & #color .~ Just embed_color
-
 simple_embed title descr =
 	empty_embed
 		& #title .~ Just title
