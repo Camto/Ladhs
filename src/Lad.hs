@@ -39,7 +39,7 @@ main :: IO ()
 main = do
 	token <- view packed <$> getEnv "TOKEN"
 	-- I know this isn't pure, but the program *should* crash if it can't find all the data files.
-	Just (icons :: AS.Value) <- U.get_json "icons"
+	Just (icons :: HM.HashMap T.Text AS.Value) <- U.get_json "icons"
 	Just (emojis :: HM.HashMap T.Text T.Text) <- U.get_json "emojis"
 	Just (dinos :: HM.HashMap T.Text T.Text) <- U.get_json "dinos"
 	void . P.runFinal . P.embedToFinal .
