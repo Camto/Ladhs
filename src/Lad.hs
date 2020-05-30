@@ -18,7 +18,10 @@ import Control.Monad
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
 import Data.Text.Strict.Lens
+import qualified Data.Aeson as AS
 import qualified Data.HashMap.Strict as HM
+import TextShow
+import System.Environment
 
 import qualified Polysemy as P
 import qualified Polysemy.Async as P
@@ -26,10 +29,6 @@ import qualified Polysemy.Embed as P
 import qualified Polysemy.Fail as P
 
 import qualified DiPolysemy as DiP
-
-import TextShow
-
-import System.Environment
 
 import qualified Utils as U
 
@@ -40,7 +39,7 @@ main :: IO ()
 main = do
 	token <- view packed <$> getEnv "TOKEN"
 	-- I know this isn't pure, but the program *should* crash if it can't find all the data files.
-	--Just icons <- U.get_json "icons"
+	Just (icons :: AS.Value) <- U.get_json "icons"
 	Just (emojis :: HM.HashMap T.Text T.Text) <- U.get_json "emojis"
 	Just (dinos :: HM.HashMap T.Text T.Text) <- U.get_json "dinos"
 	void . P.runFinal . P.embedToFinal .
