@@ -30,6 +30,8 @@ executable Bottst
                  unordered-containers,
                  bytestring,
                  aeson,
+                 rando,
+                 fuzzyset,
                  polysemy,
                  polysemy-plugin,
                  di-polysemy,

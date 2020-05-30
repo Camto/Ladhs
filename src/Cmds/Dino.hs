@@ -13,7 +13,6 @@ import Data.Maybe
 import qualified Data.Text as T
 import qualified Data.Aeson as AS
 import qualified Data.HashMap.Strict as HM
-
 import qualified Data.Text.Lazy as L
 
 import qualified Polysemy as P
@@ -32,5 +31,11 @@ dino ::
 		C.Command
 
 dino icons emojis dinos =
-	C.command @'[Maybe L.Text] "dino" $ \ctx text ->
-		return ()
+	C.command @'[Maybe L.Text] "dino" $ \ctx -> \case
+		Just dino' -> dino_cmd ctx dino'
+		Nothing ->
+			(P.embed $ U.pick_one_hm dinos) >>=
+			dino_cmd ctx . L.fromStrict
+
+dino_cmd ctx dino' =
+	void $ U.send_text (ctx ^. #channel) dino'

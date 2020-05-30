@@ -7,7 +7,8 @@ module Utils (
 	send,
 	send_embed,
 	send_text,
-	delete_msg
+	delete_msg,
+	pick_one_hm
 ) where
 
 import qualified Calamity as C
@@ -27,6 +28,8 @@ import qualified Data.Text.Lazy as L
 import qualified Data.Word as W
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Aeson as AS
+import qualified Data.HashMap.Strict as HM
+import qualified System.Random.Pick as R
 
 import qualified Polysemy as P
 
@@ -85,3 +88,5 @@ delete_msg ::
 	(C.BotC r, C.HasID C.Channel c, C.HasID C.Message m) =>
 	c -> m -> P.Sem r (Either C.RestError ())
 delete_msg = C.invoke .: C.DeleteMessage
+
+pick_one_hm hm = R.pickOne $ HM.keys hm
