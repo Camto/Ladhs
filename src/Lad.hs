@@ -34,6 +34,7 @@ import qualified Utils as U
 
 import Cmds.Say
 import Cmds.Ping
+import Cmds.Dino
 
 main :: IO ()
 main = do
@@ -52,6 +53,7 @@ main = do
 						C.addCommands $ do
 							say
 							ping
+							dino icons emojis dinos
 						{-C.react @'C.MessageCreateEvt $ \msg ->
 							when (
 								C.getID (msg ^. #author) /= (self ^. #id)) $ do

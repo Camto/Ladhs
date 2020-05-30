@@ -19,6 +19,7 @@ executable Bottst
   other-modules: Utils
                  Cmds.Say
                  Cmds.Ping
+                 Cmds.Dino
   default-language: Haskell2010
   build-depends: base >= 4.7 && < 5,
                  calamity,
