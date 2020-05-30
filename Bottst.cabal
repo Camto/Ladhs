@@ -35,7 +35,8 @@ executable Bottst
                  polysemy,
                  polysemy-plugin,
                  di-polysemy,
-                 di-df1 >= 1.2 && < 1.2.1
+                 di-df1 >= 1.2 && < 1.2.1,
+                 safe
   ghc-options: -fplugin=Polysemy.Plugin
                -fno-warn-tabs
   default-extensions: DataKinds
