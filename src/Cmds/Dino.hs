@@ -11,9 +11,10 @@ import Control.Monad
 import Control.Lens
 import Data.Maybe
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as L
 import qualified Data.Aeson as AS
 import qualified Data.HashMap.Strict as HM
-import qualified Data.Text.Lazy as L
+import qualified Data.FuzzySet as F
 
 import qualified Polysemy as P
 import qualified Polysemy.Embed as P
@@ -32,10 +33,14 @@ dino ::
 
 dino icons emojis dinos =
 	C.command @'[Maybe L.Text] "dino" $ \ctx -> \case
-		Just dino' -> dino_cmd ctx dino'
+		Just dino' -> dino_cmd icons emojis dinos ctx $ fromMaybe default_dino Nothing
 		Nothing ->
 			(P.embed $ U.pick_one_hm dinos) >>=
-			dino_cmd ctx . L.fromStrict
+			dino_cmd icons emojis dinos ctx . L.fromStrict
+	where
+		dino_set = F.fromList $ HM.keys dinos
+		default_dino :: L.Text
+		default_dino = L.fromStrict $ HM.keys dinos !! 0
 
-dino_cmd ctx dino' =
+dino_cmd icons emojis dinos ctx dino' =
 	void $ U.send_text (ctx ^. #channel) dino'
