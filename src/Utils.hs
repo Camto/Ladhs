@@ -21,15 +21,16 @@ import Calamity.HTTP.Internal.Request as C
 import Data.Composition
 import Control.Lens
 import qualified Data.Text as T
+import qualified Data.Text.IO as T
+import qualified Data.Text.Encoding as T
 import qualified Data.Text.Lazy as L
 import qualified Data.Word as W
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Aeson as AS
-import qualified Data.HashMap.Strict as HM
 
 import qualified Polysemy as P
 
-get_json :: FilePath -> IO (Maybe (HM.HashMap T.Text T.Text))
+get_json :: (AS.FromJSON a) => FilePath -> IO (Maybe a)
 get_json filename =
 	(B.readFile $ "Data/" <> filename <> ".json") >>= return . AS.decode
 

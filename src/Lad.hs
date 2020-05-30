@@ -15,9 +15,10 @@ import qualified Calamity.Types.Model.Channel.Message as C
 import Control.Lens
 import Control.Monad
 
--- import qualified Data.Text as T
+import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
 import Data.Text.Strict.Lens
+import qualified Data.HashMap.Strict as HM
 
 import qualified Polysemy as P
 import qualified Polysemy.Async as P
@@ -40,8 +41,8 @@ main = do
 	token <- view packed <$> getEnv "TOKEN"
 	-- I know this isn't pure, but the program *should* crash if it can't find all the data files.
 	--Just icons <- U.get_json "icons"
-	Just emojis <- U.get_json "emojis"
-	Just dinos <- U.get_json "dinos"
+	Just (emojis :: HM.HashMap T.Text T.Text) <- U.get_json "emojis"
+	Just (dinos :: HM.HashMap T.Text T.Text) <- U.get_json "dinos"
 	void . P.runFinal . P.embedToFinal .
 		C.runCacheInMemory . C.runMetricsNoop .
 			C.useConstantPrefix "l." $
