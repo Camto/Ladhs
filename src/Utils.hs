@@ -30,9 +30,6 @@ import qualified Data.Aeson as AS
 
 import qualified Polysemy as P
 
-infixl 0 &
-(&) = flip ($)
-
 get_json :: (AS.FromJSON a) => FilePath -> IO (Maybe a)
 get_json filename =
 	(B.readFile $ "Data/" <> filename <> ".json") >>= return . AS.decode
