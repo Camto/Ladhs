@@ -45,7 +45,7 @@ main = do
 	Just (dinos :: HM.HashMap T.Text T.Text) <- U.get_json "dinos"
 	void . P.runFinal . P.embedToFinal .
 		C.runCacheInMemory . C.runMetricsNoop .
-			C.useConstantPrefix "l." $
+			C.useConstantPrefix "l." .
 				C.runBotIO (C.BotToken $ L.fromStrict token) $ do
 				err_self <- C.invoke C.GetCurrentUser
 				case err_self of

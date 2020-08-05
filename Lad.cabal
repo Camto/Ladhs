@@ -1,4 +1,4 @@
-name: Bottst
+name: Lad
 version: 0.1
 -- synopsis:
 -- description:
@@ -13,7 +13,7 @@ build-type: Simple
 cabal-version: >=1.10
 extra-source-files: readme.md
 
-executable Bottst
+executable Lad
   hs-source-dirs: src
   main-is: Lad.hs
   other-modules: Utils
@@ -28,10 +28,11 @@ executable Bottst
                  lens,
                  text-show,
                  unordered-containers,
+                 colour,
                  bytestring,
                  aeson,
                  rando,
-                 fuzzyset,
+                 fuzzy,
                  polysemy,
                  polysemy-plugin,
                  di-polysemy,

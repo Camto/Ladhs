@@ -26,6 +26,7 @@ import qualified Data.Text.IO as T
 import qualified Data.Text.Encoding as T
 import qualified Data.Text.Lazy as L
 import qualified Data.Word as W
+import Data.Colour.SRGB (sRGB24)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Aeson as AS
 import qualified Data.HashMap.Strict as HM
@@ -37,7 +38,7 @@ get_json :: (AS.FromJSON a) => FilePath -> IO (Maybe a)
 get_json filename =
 	(B.readFile $ "Data/" <> filename <> ".json") >>= return . AS.decode
 
-embed_color = fromInteger 0xe07bb8 :: W.Word64
+embed_color = sRGB24 0xe0 0x7b 0xb8
 
 empty_embed = C.Embed {
 	C.title = Nothing,
@@ -65,7 +66,8 @@ empty_msg_opts = C.CreateMessageOptions {
 	C.nonce = Nothing,
 	C.tts = Nothing,
 	C.file = Nothing,
-	C.embed = Nothing
+	C.embed = Nothing,
+	C.allowedMentions = Nothing
 }
 
 embed_msg embed = empty_msg_opts & #embed .~ Just embed

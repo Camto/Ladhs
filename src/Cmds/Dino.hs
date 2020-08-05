@@ -15,7 +15,7 @@ import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
 import qualified Data.Aeson as AS
 import qualified Data.HashMap.Strict as HM
-import qualified Data.FuzzySet as F
+import qualified Text.Fuzzy as F
 import qualified Safe as S
 
 import qualified Polysemy as P
@@ -37,14 +37,14 @@ dino icons emojis dinos =
 	C.command @'[Maybe L.Text] "dino" $ \ctx -> \case
 		Just dino' ->
 			dino_cmd icons emojis dinos ctx . L.fromStrict $
-				fromMaybe default_dino . fmap snd $
-					S.atMay (F.get dino_set $ L.toStrict dino') 0
+				fromMaybe default_dino $
+					S.atMay (F.simpleFilter (L.toStrict dino') dino_set) 0
 		Nothing ->
 			(P.embed $ U.pick_one_hm dinos) >>=
 			dino_cmd icons emojis dinos ctx . L.fromStrict
 	where
-		dino_set = F.fromList $ HM.keys dinos
-		default_dino = HM.keys dinos !! 0
+		dino_set = HM.keys dinos
+		default_dino = dino_set !! 0
 
 dino_cmd icons emojis dinos ctx dino' =
 	void $ U.send_text (ctx ^. #channel) dino'
