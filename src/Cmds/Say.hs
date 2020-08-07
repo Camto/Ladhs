@@ -9,6 +9,7 @@ import qualified Calamity.Metrics.Eff as C
 
 import Control.Monad
 import Control.Lens
+import qualified Data.Char as Ch
 
 import qualified Data.Text.Lazy as L
 
@@ -25,5 +26,7 @@ say ::
 		C.Command
 
 say = C.command @'[C.KleeneStarConcat L.Text] "say" $ \ctx text -> do
-	void $ U.send_text (ctx ^. #channel) text
+	let text_empty = L.all Ch.isSpace text
+	void $ U.send_text (ctx ^. #channel) $
+		if text_empty then "\8302" else text -- On empty send zero width space.
 	void $ U.delete_msg (ctx ^. #channel) $ (ctx ^. #message)
