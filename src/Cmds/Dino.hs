@@ -15,6 +15,8 @@ import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
 import qualified Data.Aeson as AS
 import qualified Data.HashMap.Strict as HM
+import qualified Data.Vector as V
+import qualified System.Random.Pick as R
 import qualified Text.Fuzzy as F
 import qualified Safe as S
 
@@ -39,7 +41,15 @@ dino icons dinos =
 				return . L.fromStrict . fromMaybe default_dino $
 					S.atMay (F.simpleFilter (L.toStrict name') dino_set) 0
 			Nothing -> (P.embed $ U.pick_one_hm dinos) <&> L.fromStrict
-		void $ U.send_text (ctx ^. #channel) dino'
+		let AS.Array dino_icons = icons HM.! "dinos"
+		AS.String icon <- P.embed . R.pickOne $ V.toList dino_icons
+		void $ U.send_embed (ctx ^. #channel) $
+			U.empty_embed
+				& #description .~ Just (L.fromStrict . (HM.!) dinos $ L.toStrict dino')
+				& #author .~ Just (U.empty_author
+					& #name .~ Just (last . L.splitOn "#" $ L.replace "_" " " dino')
+					& #url .~ Just (L.append "https://en.wikipedia.org/wiki/" dino')
+					& #iconUrl .~ Just (L.fromStrict icon))
 	where
 		dino_set = HM.keys dinos
 		default_dino = dino_set !! 0

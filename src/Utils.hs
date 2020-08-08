@@ -1,4 +1,7 @@
 module Utils (
+	empty_embed,
+	empty_msg_opts,
+	empty_author,
 	get_json,
 	embed_color,
 	embed_msg,
@@ -8,7 +11,8 @@ module Utils (
 	send_embed,
 	send_text,
 	delete_msg,
-	pick_one_hm
+	pick_one_hm,
+	pick_one_hm_elems
 ) where
 
 import qualified Calamity as C
@@ -70,6 +74,13 @@ empty_msg_opts = C.CreateMessageOptions {
 	C.allowedMentions = Nothing
 }
 
+empty_author = C.EmbedAuthor {
+	C.name = Nothing,
+	C.url = Nothing,
+	C.iconUrl = Nothing,
+	C.proxyIconURL = Nothing
+}
+
 embed_msg embed = empty_msg_opts & #embed .~ Just embed
 
 text_msg text = empty_msg_opts & #content .~ (Just $ L.toStrict text)
@@ -92,3 +103,5 @@ delete_msg ::
 delete_msg = C.invoke .: C.DeleteMessage
 
 pick_one_hm hm = R.pickOne $ HM.keys hm
+
+pick_one_hm_elems hm = R.pickOne $ HM.elems hm
