@@ -26,25 +26,20 @@ import qualified Utils as U
 dino ::
 	(HM.HashMap T.Text AS.Value) ->
 	(HM.HashMap T.Text T.Text) ->
-	(HM.HashMap T.Text T.Text) ->
 	P.Sem (
 		C.DSLState (
 			C.SetupEff
 				'[C.ParsePrefix, C.MetricEff, C.CacheEff, P.Embed IO, P.Final IO]))
 		C.Command
 
-dino icons emojis dinos =
-	C.command @'[Maybe L.Text] "dino" $ \ctx -> \case
-		Just dino' ->
-			dino_cmd icons emojis dinos ctx . L.fromStrict $
-				fromMaybe default_dino $
-					S.atMay (F.simpleFilter (L.toStrict dino') dino_set) 0
-		Nothing ->
-			(P.embed $ U.pick_one_hm dinos) >>=
-			dino_cmd icons emojis dinos ctx . L.fromStrict
+dino icons dinos =
+	C.command @'[Maybe L.Text] "dino" $ \ctx name -> do
+		dino' <- case name of
+			Just name' ->
+				return . L.fromStrict . fromMaybe default_dino $
+					S.atMay (F.simpleFilter (L.toStrict name') dino_set) 0
+			Nothing -> (P.embed $ U.pick_one_hm dinos) <&> L.fromStrict
+		void $ U.send_text (ctx ^. #channel) dino'
 	where
 		dino_set = HM.keys dinos
 		default_dino = dino_set !! 0
-
-dino_cmd icons emojis dinos ctx dino' =
-	void $ U.send_text (ctx ^. #channel) dino'

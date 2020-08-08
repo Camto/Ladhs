@@ -53,7 +53,7 @@ main = do
 						C.addCommands $ do
 							say
 							ping
-							dino icons emojis dinos
+							dino icons dinos
 						{-C.react @'C.MessageCreateEvt $ \msg ->
 							when (
 								C.getID (msg ^. #author) /= (self ^. #id)) $ do
